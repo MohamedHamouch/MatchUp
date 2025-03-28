@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Tournament;
 use App\Models\User;
+use App\Models\Tournament;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Game extends Model
 {
+    use HasFactory;
     public function tournament()
     {
         return $this->belongsTo(Tournament::class);
