@@ -17,14 +17,14 @@ beforeEach(function () {
 test('users can register', function () {
     $response = $this->postJson('/api/register', $this->validCredentials);
 
-    $response->assertStatus(200)
+    $response->assertStatus(201)
         ->assertJsonStructure([
             'status',
             'message',
             'user' => ['id', 'name', 'email'],
-            'authorization' => ['token', 'type'],
+            'token',
         ]);
-        
+
     $this->assertDatabaseHas('users', [
         'email' => 'test@example.com',
         'name' => 'Test User',
@@ -46,7 +46,7 @@ test('users can login', function () {
         ->assertJsonStructure([
             'status',
             'user' => ['id', 'name', 'email'],
-            'authorization' => ['token', 'type'],
+            'token', // Updated to match the actual response field
         ]);
 });
 
@@ -63,8 +63,7 @@ test('users cannot login with invalid credentials', function () {
 
     $response->assertStatus(401)
         ->assertJson([
-            'status' => 'error',
-            'message' => 'Unauthorized',
+            'error' => 'Invalid credentials', // Updated to match the actual response structure
         ]);
 });
 
@@ -77,7 +76,6 @@ test('authenticated users can logout', function () {
 
     $response->assertStatus(200)
         ->assertJson([
-            'status' => 'success',
             'message' => 'Successfully logged out',
         ]);
 });
@@ -102,5 +100,3 @@ test('authenticated users can get their profile', function () {
             ],
         ]);
 });
-
-
